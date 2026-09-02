@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9 Pool Family League — Musim II</title>
+  <meta name="description" content="9 Pool Family League Musim II — Open Registration">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --black:#090909;
+      --black-2:#111111;
+      --black-3:#181818;
+      --orange:#ff7a00;
+      --orange-2:#ff9a2e;
+      --white:#ffffff;
+      --muted:#b5b5b5;
+      --line:rgba(255,255,255,.10);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Poppins,Arial,sans-serif;
+      background:var(--black);
+      color:var(--white);
+      line-height:1.6;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{width:min(1180px,92%);margin:auto}
+
+    /* NAVBAR */
+    .navbar{
+      position:sticky;top:0;z-index:50;
+      background:rgba(9,9,9,.94);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      min-height:76px;
+      display:flex;align-items:center;justify-content:space-between;gap:30px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800}
+    .logo{
+      width:48px;height:48px;border-radius:50%;
+      background:var(--white);color:var(--black);
+      display:grid;place-items:center;
+      font-family:"Bebas Neue",sans-serif;font-size:26px;
+      border:4px solid var(--orange);
+      box-shadow:0 0 0 2px var(--black);
+    }
+    .brand-text{line-height:1}
+    .brand-text strong{display:block;font-size:18px}
+    .brand-text span{font-size:10px;color:var(--orange);letter-spacing:2px}
+    .nav-links{display:flex;gap:28px;font-size:13px;font-weight:600;color:#ddd}
+    .nav-links a:hover{color:var(--orange)}
+    .nav-btn{
+      background:var(--orange);color:var(--black);
+      padding:11px 18px;border-radius:7px;font-weight:800;font-size:13px;
+    }
+
+    /* HERO */
+    .hero{
+      min-height:720px;
+      display:flex;align-items:center;
+      position:relative;overflow:hidden;
+      background:
+        radial-gradient(circle at 78% 40%,rgba(255,122,0,.17),transparent 27%),
+        linear-gradient(110deg,#080808 0%,#101010 62%,#17100a 100%);
+    }
+    .hero:after{
+      content:"9";
+      position:absolute;right:-20px;bottom:-130px;
+      font-family:"Bebas Neue";font-size:600px;line-height:.8;
+      color:rgba(255,122,0,.045);pointer-events:none;
+    }
+    .hero-content{position:relative;z-index:2;padding:90px 0}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:9px;
+      border:1px solid rgba(255,122,0,.4);
+      color:var(--orange-2);background:rgba(255,122,0,.07);
+      padding:8px 13px;border-radius:99px;
+      font-size:11px;font-weight:800;letter-spacing:2px;
+      text-transform:uppercase;
+    }
+    .dot{width:7px;height:7px;background:var(--orange);border-radius:50%;box-shadow:0 0 12px var(--orange)}
+    h1{
+      font-family:"Bebas Neue",sans-serif;
+      font-size:clamp(72px,11vw,145px);
+      line-height:.82;
+      letter-spacing:1px;
+      margin:25px 0 22px;
+      max-width:850px;
+    }
+    h1 .orange{color:var(--orange)}
+    .hero p{max-width:650px;color:#c8c8c8;font-size:16px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:14px 22px;border-radius:7px;
+      font-size:13px;font-weight:800;
+      transition:.2s;
+    }
+    .btn-primary{background:var(--orange);color:var(--black)}
+    .btn-primary:hover{background:var(--orange-2);transform:translateY(-2px)}
+    .btn-outline{border:1px solid #555;color:white}
+    .btn-outline:hover{border-color:var(--orange);color:var(--orange)}
+
+    /* OPEN REGISTRATION */
+    .registration{
+      background:var(--orange);color:var(--black);
+      padding:18px 0;
+    }
+    .reg-inner{
+      display:flex;align-items:center;justify-content:space-between;gap:20px;
+    }
+    .reg-title{font-weight:900;font-size:20px}
+    .reg-sub{font-size:12px;font-weight:600;opacity:.8}
+    .reg-date{
+      border:2px solid var(--black);
+      padding:9px 14px;border-radius:6px;
+      font-size:12px;font-weight:900;white-space:nowrap;
+    }
+
+    /* SECTIONS */
+    section{padding:88px 0}
+    .section-head{margin-bottom:38px}
+    .kicker{
+      color:var(--orange);font-size:11px;font-weight:800;
+      letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;
+    }
+    h2{
+      font-family:"Bebas Neue";font-size:58px;line-height:1;
+      letter-spacing:.5px;
+    }
+    .section-head p{color:var(--muted);max-width:650px;margin-top:12px;font-size:14px}
+
+    .info-grid{
+      display:grid;grid-template-columns:repeat(4,1fr);
+      border:1px solid var(--line);
+      background:var(--black-2);
+    }
+    .info-card{padding:25px;border-right:1px solid var(--line)}
+    .info-card:last-child{border-right:0}
+    .info-card .label{color:#888;font-size:10px;letter-spacing:1.5px;font-weight:700}
+    .info-card .value{font-size:25px;font-weight:800;margin-top:5px}
+    .info-card .value.orange{color:var(--orange)}
+
+    .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .feature{
+      background:var(--black-2);border:1px solid var(--line);
+      padding:28px;min-height:190px;position:relative;overflow:hidden;
+    }
+    .feature:before{
+      content:"";position:absolute;left:0;top:0;width:4px;height:100%;
+      background:var(--orange);
+    }
+    .feature-num{
+      font-family:"Bebas Neue";font-size:42px;color:var(--orange);
+      line-height:1;
+    }
+    .feature h3{font-size:18px;margin:15px 0 8px}
+    .feature p{font-size:13px;color:#aaa}
+
+    .quote{
+      border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+      text-align:center;padding:70px 20px;
+      background:linear-gradient(90deg,#090909,#15100b,#090909);
+    }
+    .quote strong{
+      display:block;font-family:"Bebas Neue";font-size:clamp(42px,7vw,78px);
+      line-height:.95;
+    }
+    .quote span{display:block;color:var(--orange);font-size:12px;letter-spacing:2px;font-weight:800;margin-top:15px}
+
+    .cta{
+      background:var(--black-2);
+      border:1px solid var(--line);
+      padding:55px;
+      display:flex;align-items:center;justify-content:space-between;gap:30px;
+    }
+    .cta h2{font-size:52px}
+    .cta p{color:#aaa;font-size:13px;margin-top:10px;max-width:650px}
+
+    footer{
+      border-top:1px solid var(--line);
+      padding:28px 0;color:#777;font-size:11px;
+    }
+    .footer-inner{display:flex;justify-content:space-between;gap:20px}
+    .footer-brand{color:white;font-weight:800}
+    .footer-brand span{color:var(--orange)}
+
+    @media(max-width:850px){
+      .nav-links{display:none}
+      .nav-btn{display:none}
+      .info-grid{grid-template-columns:repeat(2,1fr)}
+      .info-card:nth-child(2){border-right:0}
+      .info-card:nth-child(-n+2){border-bottom:1px solid var(--line)}
+      .feature-grid{grid-template-columns:1fr}
+      .cta{flex-direction:column;align-items:flex-start;padding:35px}
+      .reg-inner{align-items:flex-start;flex-direction:column}
+    }
+    @media(max-width:520px){
+      .hero{min-height:650px}
+      h1{font-size:78px}
+      section{padding:65px 0}
+      h2{font-size:48px}
+      .info-grid{grid-template-columns:1fr}
+      .info-card{border-right:0;border-bottom:1px solid var(--line)!important}
+      .info-card:last-child{border-bottom:0!important}
+      .cta h2{font-size:44px}
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="container nav">
+      <a class="brand" href="#">
+        <div class="logo">9</div>
+        <div class="brand-text">
+          <strong>9 POOL FAMILY</strong>
+          <span>LEAGUE • MUSIM II</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#pendaftaran">Pendaftaran</a>
+        <a href="#tentang">Tentang Liga</a>
+        <a href="#format">Format</a>
+        <a href="#regulasi">Regulasi</a>
+      </nav>
+
+      <a class="nav-btn" href="#pendaftaran">DAFTAR SEKARANG</a>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <div class="container hero-content">
+        <div class="eyebrow"><span class="dot"></span> OPEN REGISTRATION • SEASON II</div>
+
+        <h1>
+          9 POOL<br>
+          <span class="orange">FAMILY</span><br>
+          LEAGUE
+        </h1>
+
+        <p>
+          Musim II resmi dibuka. Liga 9-Ball dengan sistem kompetisi
+          <strong>Single Round Robin</strong>, handicap berbasis Tier,
+          dan prinsip bahwa setiap rack memiliki arti.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#pendaftaran">BUKA PENDAFTARAN</a>
+          <a class="btn btn-outline" href="#format">LIHAT KONSEP LIGA</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="registration" id="pendaftaran">
+      <div class="container reg-inner">
+        <div>
+          <div class="reg-title">PENDAFTARAN MUSIM II DIBUKA</div>
+          <div class="reg-sub">Siapkan nama peserta dan pastikan memahami konsep liga sebelum mendaftar.</div>
+        </div>
+        <div class="reg-date">REGISTRATION FEE • Rp200.000 / ORANG</div>
+      </div>
+    </div>
+
+    <section id="tentang">
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">Musim II • 9-Ball</div>
+          <h2>BUKAN SEKADAR TURNAMEN</h2>
+          <p>
+            Musim II dirancang sebagai liga yang menekankan konsistensi bermain,
+            menyelesaikan pertandingan, dan menjaga kompetisi tetap hidup sampai akhir musim.
+          </p>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="label">FORMAT</div>
+            <div class="value orange">ROUND ROBIN</div>
+          </div>
+          <div class="info-card">
+            <div class="label">PERTANDINGAN</div>
+            <div class="value">RACE TO 9</div>
+          </div>
+          <div class="info-card">
+            <div class="label">BIAYA DAFTAR</div>
+            <div class="value">Rp200K</div>
+          </div>
+          <div class="info-card">
+            <div class="label">SISTEM POIN</div>
+            <div class="value">1 RACK = 1 PT</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="format" style="background:#0d0d0d">
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">Konsep Utama</div>
+          <h2>APA YANG BERBEDA?</h2>
+          <p>
+            Fondasi halaman ini mengikuti regulasi resmi Liga 9 Pool Family Musim II.
+            Detail teknis akan kita kembangkan bertahap di halaman berikutnya.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature">
+            <div class="feature-num">01</div>
+            <h3>SINGLE ROUND ROBIN</h3>
+            <p>Setiap peserta bertemu satu kali dengan peserta lainnya dalam satu musim.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-num">02</div>
+            <h3>9-BALL RACE TO 9</h3>
+            <p>Setiap pertandingan menggunakan format Race to 9 sesuai regulasi Musim II.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-num">03</div>
+            <h3>HANDICAP BERBASIS TIER</h3>
+            <p>Handicap ditentukan berdasarkan Tier dan tetap selama musim berlangsung.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-num">04</div>
+            <h3>EVERY RACK MATTERS</h3>
+            <p>Setiap rack pada skor akhir pertandingan dihitung sebagai satu poin klasemen.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-num">05</div>
+            <h3>AKTIF SAMPAI AKHIR</h3>
+            <p>Peserta wajib menyelesaikan pertandingan sesuai pasangan dan target mingguan.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-num">06</div>
+            <h3>SPORTSMANSHIP</h3>
+            <p>Kompetisi dibangun dengan komunikasi, tanggung jawab, dan integritas hasil pertandingan.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="quote">
+      <div class="container">
+        <strong>EVERY RACK MATTERS.</strong>
+        <strong>EVERY MATCH MATTERS.</strong>
+        <strong>EVERY PLAYER MATTERS.</strong>
+        <span>LIGA 9 POOL FAMILY — MUSIM II</span>
+      </div>
+    </div>
+
+    <section id="regulasi">
+      <div class="container">
+        <div class="cta">
+          <div>
+            <div class="kicker">Tahap Berikutnya</div>
+            <h2>KITA BANGUN<br>PELAN-PELAN.</h2>
+            <p>
+              Beranda ini menjadi fondasi. Selanjutnya kita bisa menambahkan
+              daftar peserta, Tier, klasemen live, jadwal mingguan, hasil pertandingan,
+              achievement, statistik pemain, dan halaman regulasi lengkap.
+            </p>
+          </div>
+          <a class="btn btn-primary" href="#pendaftaran">SIAP UNTUK MUSIM II</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-brand">9 POOL <span>FAMILY LEAGUE</span></div>
+      <div>Musim II • 9-Ball • 2026</div>
+    </div>
+  </footer>
+
+</body>
+</html>
