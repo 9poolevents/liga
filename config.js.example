@@ -1,4 +1,0 @@
-// Salin file ini menjadi config.js, lalu isi URL Web App Google Apps Script.
-window.LIGA_CONFIG = {
-  GOOGLE_SHEETS_BRIDGE_URL: "https://script.google.com/macros/s/GANTI_DENGAN_DEPLOYMENT_ID/exec"
-};
