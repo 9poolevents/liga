@@ -1,21 +1,31 @@
 # Liga 9 Pool Family — Musim II
 
-Website statis siap GitHub Pages untuk menampilkan Overview, Peserta, Input Hasil, Klasemen, Keaktifan, Power Rating, Player vs Player, dan Informasi.
+Website GitHub Pages ini menampilkan data Google Sheet dengan mengikuti tampilan sheet secara langsung. Versi ini menggunakan **Google Apps Script bridge** agar website dapat menerima:
 
-## File project
+- hanya kolom yang terlihat;
+- hanya baris yang terlihat;
+- urutan kolom dan baris sesuai Google Sheet;
+- lebar kolom sesuai Google Sheet;
+- tinggi baris sesuai Google Sheet;
+- nilai yang sudah diformat sebagai teks oleh Google Sheet.
 
-| File | Fungsi |
-|---|---|
-| `index.html` | Struktur halaman dan navigasi |
-| `styles.css` | Desain responsif |
-| `app.js` | Tab, tabel, pencarian, dan koneksi Google Sheet |
-| `config.js.example` | Template ID spreadsheet |
-| `.gitignore` | Mengabaikan `config.js` lokal |
-| `README.md` | Panduan ini |
+## Struktur folder
 
-## Struktur Google Sheet
+```text
+liga9-pool-family/
+├── index.html
+├── styles.css
+├── app.js
+├── config.js.example
+├── .gitignore
+├── README.md
+└── apps-script/
+    └── Code.gs
+```
 
-Buat enam tab dengan nama persis:
+## Struktur tab Google Sheet
+
+Nama tab harus persis:
 
 ```text
 Peserta
@@ -26,136 +36,162 @@ Power Rating
 Player vs Player
 ```
 
-Baris pertama setiap tab harus berisi nama kolom. Website membaca kolom `A:Z`.
+Baris pertama setiap tab digunakan sebagai header. Website tidak lagi memaksakan susunan kolom khusus. Jika Anda mengubah urutan kolom di Google Sheet, website akan mengikuti urutan tersebut.
 
-## Koneksi Google Sheet tanpa API key
+## Mengapa menggunakan Google Apps Script?
 
-Versi ini menggunakan endpoint publik Google Visualization. Anda tidak perlu membuat atau memasukkan API key. Spreadsheet harus dapat dibaca publik.
+GitHub Pages tidak dapat mengetahui baris atau kolom yang disembunyikan melalui endpoint publik biasa. Google Apps Script berjalan dengan akses Google Sheet dan dapat membaca `isRowHiddenByUser`, `isColumnHiddenByUser`, `getColumnWidth`, serta `getRowHeight`.
 
-Di Google Sheet, buka **Share → General access → Anyone with the link → Viewer**. Website hanya membaca data dan tidak dapat mengubah spreadsheet.
+Website membaca hasil dari Apps Script, bukan langsung membaca API key Google Cloud. Karena itu, API key Google Sheets tidak diperlukan.
 
-## Mengisi konfigurasi
+## Menyiapkan Apps Script
 
-Buat salinan `config.js.example` dengan nama `config.js`.
+1. Buka Google Sheet Anda.
+2. Pilih **Extensions → Apps Script**.
+3. Hapus kode awal yang ada.
+4. Buka file `apps-script/Code.gs` dari paket ini.
+5. Salin seluruh isinya ke editor Apps Script.
+6. Klik ikon **Project Settings**.
+7. Pada bagian **Script Properties**, tambahkan:
 
-Windows Command Prompt:
-
-```bat
-copy config.js.example config.js
+```text
+Property: SPREADSHEET_ID
+Value: ID_GOOGLE_SHEET_ANDA
 ```
 
-Windows PowerShell:
-
-```powershell
-Copy-Item config.js.example config.js
-```
-
-macOS/Linux:
-
-```bash
-cp config.js.example config.js
-```
-
-Isi `config.js` dengan ID spreadsheet:
-
-```javascript
-window.LIGA_CONFIG = {
-  GOOGLE_SHEET_ID: "1ABCxyz987654321"
-};
-```
-
-Contoh URL spreadsheet:
+ID spreadsheet diambil dari URL:
 
 ```text
 https://docs.google.com/spreadsheets/d/1ABCxyz987654321/edit
 ```
 
-Nilai ID adalah bagian di antara `/d/` dan `/edit`.
+Nilainya adalah:
 
-## Upload ke GitHub
+```text
+1ABCxyz987654321
+```
 
-1. Buat repository baru di GitHub.
-2. Upload `index.html`, `styles.css`, `app.js`, `config.js.example`, `.gitignore`, dan `README.md`.
-3. Buat file baru bernama `config.js` di root repository.
-4. Isi `config.js` dengan ID spreadsheet Anda.
-5. Commit perubahan.
+8. Kembali ke editor Apps Script.
+9. Klik **Deploy → New deployment**.
+10. Pada jenis deployment, pilih **Web app**.
+11. Isi:
 
-Karena spreadsheet bersifat publik, jangan menyimpan password, nomor identitas, atau data rahasia di dalamnya.
+```text
+Execute as: Me
+Who has access: Anyone
+```
 
-## Deploy ke GitHub Pages
-
-1. Buka repository.
-2. Pilih **Settings → Pages**.
-3. Pada **Build and deployment**, pilih **Deploy from a branch**.
-4. Pilih branch `main` dan folder `/ (root)`.
-5. Klik **Save**.
-6. Buka URL GitHub Pages yang diberikan GitHub.
+12. Klik **Deploy**.
+13. Jika diminta otorisasi, pilih akun Google Anda dan izinkan akses ke spreadsheet.
+14. Salin **Web app URL** yang berakhiran `/exec`.
 
 Contoh:
 
 ```text
-https://nama-akun.github.io/nama-repository/
+https://script.google.com/macros/s/DEPLOYMENT_ID/exec
 ```
 
-## Menghapus API key lama
+## Mengisi `config.js`
 
-Karena versi baru tidak memakai API key, API key lama sebaiknya dihapus atau dinonaktifkan.
-
-1. Buka [Google Cloud Credentials](https://console.cloud.google.com/apis/credentials).
-2. Pilih project `Liga 9 Pool Family`.
-3. Pada bagian **API Keys**, cari key lama.
-4. Klik menu tiga titik di sebelah key.
-5. Pilih **Delete** untuk menghapus permanen, atau buka key lalu pilih **Disable** bila ingin menyimpannya sementara.
-6. Konfirmasi tindakan tersebut.
-
-Setelah itu, buka repository GitHub dan hapus API key dari file `config.js` sehingga isinya hanya:
+Buat file `config.js` di root repository, satu folder dengan `index.html`:
 
 ```javascript
 window.LIGA_CONFIG = {
-  GOOGLE_SHEET_ID: "ID_GOOGLE_SHEET_ANDA"
+  GOOGLE_SHEETS_BRIDGE_URL: "https://script.google.com/macros/s/DEPLOYMENT_ID/exec"
 };
 ```
 
-Jika API key lama pernah tersimpan di riwayat commit GitHub, tetap hapus atau nonaktifkan key tersebut di Google Cloud. Menghapus teks dari commit terbaru saja tidak membuat key lama aman.
+Tidak perlu menambahkan `GOOGLE_SHEET_ID` atau `GOOGLE_SHEETS_API_KEY` pada versi ini.
 
-## Pengujian lokal
+## Cara membuat baris atau kolom tidak tampil
 
-Jangan membuka `index.html` dengan double-click. Jalankan server lokal:
+Di Google Sheet:
 
-```bash
-python -m http.server 8080
+- klik kanan nomor baris, lalu pilih **Hide row**;
+- klik kanan huruf kolom, lalu pilih **Hide column**.
+
+Setelah website di-refresh, baris dan kolom tersebut tidak akan dikirim ke website.
+
+Untuk menampilkan kembali:
+
+- klik tanda panah kecil di antara baris atau kolom yang tersembunyi;
+- pilih **Unhide row** atau **Unhide column**.
+
+Catatan: versi ini membaca baris/kolom yang disembunyikan oleh pengguna. Filter tampilan biasa dapat memiliki perilaku berbeda tergantung konfigurasi Google Sheet.
+
+## Komposisi ukuran otomatis
+
+Ukuran tabel website mengikuti Google Sheet:
+
+- lebar kolom dibaca dalam pixel dari `getColumnWidth`;
+- tinggi baris dibaca dalam pixel dari `getRowHeight`;
+- teks panjang dapat membungkus di dalam sel agar tidak merusak layout;
+- pada HP, tabel tetap dapat digeser horizontal jika total lebar kolom lebih besar dari layar.
+
+Jika Anda ingin kolom lebih lebar atau lebih sempit, ubah langsung ukuran kolom di Google Sheet, lalu refresh website.
+
+## Upload ke GitHub
+
+Upload atau timpa file berikut:
+
+```text
+index.html
+styles.css
+app.js
+config.js.example
+README.md
+apps-script/Code.gs
 ```
 
-Buka `http://localhost:8080`.
+Kemudian buat file baru:
 
-## Jika data belum muncul
+```text
+config.js
+```
 
-Periksa nama tab, akses **Anyone with the link → Viewer**, ID spreadsheet, dan posisi `config.js` yang harus satu folder dengan `index.html`. Tekan `Ctrl + F5` setelah GitHub Pages selesai memperbarui.
+Isi dengan URL Web App Apps Script. Commit semua perubahan.
+
+## Deploy GitHub Pages
+
+1. Buka **Settings → Pages** pada repository.
+2. Pilih **Deploy from a branch**.
+3. Pilih branch `main`.
+4. Pilih folder `/ (root)`.
+5. Klik **Save**.
+6. Tunggu GitHub Pages selesai memperbarui.
+7. Buka URL website dan klik **Refresh**.
+
+## Pengaturan akses Google Sheet
+
+Untuk bridge ini, spreadsheet tidak perlu dipublikasikan sebagai **Anyone with the link** jika Web App Apps Script dijalankan sebagai akun pemilik dan deployment memberikan akses **Anyone**. Namun, jangan menyimpan data rahasia pada website publik karena data yang dikirim bridge tetap dapat dilihat oleh pengunjung website.
+
+## Jika data belum tampil
+
+Periksa:
+
+1. URL `GOOGLE_SHEETS_BRIDGE_URL` berakhiran `/exec`.
+2. Deployment Apps Script menggunakan **Execute as: Me**.
+3. **Who has access** disetel **Anyone**.
+4. Script Property bernama `SPREADSHEET_ID` sudah dibuat.
+5. ID spreadsheet benar.
+6. Nama keenam tab benar.
+7. Setelah mengubah kode Apps Script, buat deployment version baru atau gunakan **Manage deployments → Edit → New version**.
+8. Tekan `Ctrl + F5` pada website.
+
+## Menghapus API key lama
+
+Versi ini tidak menggunakan API key. Jika Anda sebelumnya membuat API key Google Cloud, buka [Google Cloud Credentials](https://console.cloud.google.com/apis/credentials), pilih project `Liga 9 Pool Family`, lalu pada bagian **API Keys** pilih menu tiga titik dan klik **Delete** atau **Disable**.
+
+Hapus juga API key dari `config.js`. Isi file tersebut hanya boleh seperti ini:
+
+```javascript
+window.LIGA_CONFIG = {
+  GOOGLE_SHEETS_BRIDGE_URL: "URL_WEB_APP_APPS_SCRIPT"
+};
+```
 
 ## Referensi
 
-[1]: https://support.google.com/docs/answer/2494822 "Google Drive Help — Share files from Google Drive"
-[2]: https://docs.github.com/en/pages "GitHub Docs — GitHub Pages"
-[3]: https://developers.google.com/google-ads/api/docs/concepts/curl "Google APIs — Public data access concepts"
-
-## Kolom khusus tab Peserta
-
-Tab `Peserta` hanya menampilkan kolom berikut dalam urutan tetap:
-
-| Urutan | Header yang tampil |
-|---:|---|
-| 1 | No. — dibuat otomatis oleh website |
-| 2 | No ID |
-| 3 | Nama Peserta |
-| 4 | Tier |
-| 5 | Kolom4 |
-| 6 | Petunjuk |
-
-Gunakan header berikut pada baris pertama tab `Peserta`:
-
-```text
-No ID | Nama Peserta | Tier | Kolom4 | Petunjuk
-```
-
-Kolom `No.` tidak perlu dibuat di Google Sheet karena website membuat nomor urut otomatis. Nama header boleh menggunakan variasi spasi atau huruf besar-kecil; website akan mencocokkannya secara fleksibel.
-
+[1]: https://developers.google.com/apps-script/guides/web "Google Apps Script — Web Apps"
+[2]: https://developers.google.com/apps-script/reference/spreadsheet/sheet "Google Apps Script — Sheet class"
+[3]: https://docs.github.com/en/pages "GitHub Docs — GitHub Pages"

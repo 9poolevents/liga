@@ -1,5 +1,4 @@
-// Salin file ini menjadi config.js, lalu isi ID Google Sheet publik.
-// Versi ini menggunakan Google Visualization dan tidak membutuhkan API key.
+// Salin file ini menjadi config.js, lalu isi URL Web App Google Apps Script.
 window.LIGA_CONFIG = {
-  GOOGLE_SHEET_ID: "1f4SOSBhHmlOPRqZ2fsRcpnXVEbeQNr2A"
+  GOOGLE_SHEETS_BRIDGE_URL: "https://script.google.com/macros/s/AKfycbwsI23Nt1DM7ZN65mKhgDrIAiIhY0lKGoTbNZT4eghALzNHt9xWVM_YhL6E7fxwgc6n/exec"
 };
