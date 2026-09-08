@@ -137,3 +137,25 @@ Periksa nama tab, akses **Anyone with the link → Viewer**, ID spreadsheet, dan
 [1]: https://support.google.com/docs/answer/2494822 "Google Drive Help — Share files from Google Drive"
 [2]: https://docs.github.com/en/pages "GitHub Docs — GitHub Pages"
 [3]: https://developers.google.com/google-ads/api/docs/concepts/curl "Google APIs — Public data access concepts"
+
+## Kolom khusus tab Peserta
+
+Tab `Peserta` hanya menampilkan kolom berikut dalam urutan tetap:
+
+| Urutan | Header yang tampil |
+|---:|---|
+| 1 | No. — dibuat otomatis oleh website |
+| 2 | No ID |
+| 3 | Nama Peserta |
+| 4 | Tier |
+| 5 | Kolom4 |
+| 6 | Petunjuk |
+
+Gunakan header berikut pada baris pertama tab `Peserta`:
+
+```text
+No ID | Nama Peserta | Tier | Kolom4 | Petunjuk
+```
+
+Kolom `No.` tidak perlu dibuat di Google Sheet karena website membuat nomor urut otomatis. Nama header boleh menggunakan variasi spasi atau huruf besar-kecil; website akan mencocokkannya secara fleksibel.
+
