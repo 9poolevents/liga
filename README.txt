@@ -34,3 +34,6 @@ EDIT DENGAN NOTEPAD
 
 GITHUB PAGES
 Settings > Pages > Deploy from branch > main > /(root) > Save.
+
+REFRESH DATA
+Refresh otomatis sekarang setiap 5 menit. Refresh otomatis berjalan tanpa menampilkan loading ulang sehingga halaman tidak berkedip. Loading hanya tampil saat pertama membuka halaman, berpindah tab, atau menekan tombol Segarkan.
