@@ -1,38 +1,36 @@
-LIGA 9 POOL FAMILY MUSIM II - PANDUAN
+LIGA 9 POOL FAMILY MUSIM II - PANDUAN V3
 
-A. FILE WEBSITE
-index.html = halaman utama
-style.css = tampilan
-app.js = logika data dan Player vs Player
-config.js = daftar tab dan URL API
-Code.gs = kode Google Apps Script untuk membaca hidden row/column
+PERBAIKAN UTAMA
+- Setiap tab website sekarang meminta sheet Google Sheet berdasarkan NAMA sheet yang sama persis: Peserta, Input Hasil, Klasemen, Keaktifan, Power Rating, Player vs Player.
+- Gid tetap dikirim sebagai cadangan.
+- Tema website sudah diubah menjadi dark charcoal dengan aksen emas hangat dan jingga senja.
+- Layout tabel tetap dapat digeser horizontal di HP tanpa merusak ukuran teks.
 
-B. AKTIFKAN API AGAR HIDE/UNHIDE MENGIKUTI SHEET
-1. Buka Google Sheet.
-2. Pilih Extensions > Apps Script.
-3. Hapus kode lama, lalu salin seluruh isi file Code.gs ke editor Apps Script.
-4. Klik Deploy > New deployment.
-5. Pilih type Web app.
-6. Execute as: Me.
-7. Who has access: Anyone.
-8. Klik Deploy dan salin Web app URL.
-9. Buka config.js dengan Notepad.
-10. Isi sheetsApiUrl dengan URL tersebut, contoh:
-   sheetsApiUrl: 'https://script.google.com/macros/s/XXXXXXXX/exec',
-11. Unggah config.js, app.js, index.html, style.css, dan Code.gs ke GitHub.
+AGAR PERBAIKAN AKTIF
+1. Di Google Sheet, pastikan nama sheet persis:
+   Peserta
+   Input Hasil
+   Klasemen
+   Keaktifan
+   Power Rating
+   Player vs Player
+2. Salin Code.gs versi terbaru ke Extensions > Apps Script.
+3. Karena kode Apps Script berubah, buka Deploy > Manage deployments > Edit deployment > Version: New version > Deploy.
+4. Pastikan Execute as: Me dan Who has access: Anyone.
+5. Salin Web app URL ke config.js pada sheetsApiUrl. Jangan biarkan teks TEMPEL_URL_WEB_APP_APPS_SCRIPT_DI_SINI.
+6. Upload ulang index.html, style.css, app.js, config.js ke GitHub.
+7. Lakukan hard refresh browser dengan Ctrl+F5.
 
-API ini mengirim hanya baris dan kolom yang sedang terlihat, serta memeriksa status hidden setiap kali website melakukan refresh. Jika hide/unhide berubah di Google Sheet, tekan Segarkan atau tunggu maksimal 60 detik.
+HIDE/UNHIDE
+Website meminta data dengan nama sheet. Apps Script memeriksa setiap baris dan kolom menggunakan isRowHiddenByUser dan isColumnHiddenByUser. Tekan Segarkan atau tunggu maksimal 60 detik setelah perubahan hide/unhide.
 
-C. PLAYER VS PLAYER
-Tab Player vs Player sekarang memiliki dua dropdown. Daftar pemain diambil dari tab Peserta. Setelah Pemain A dan B dipilih, website mencari pertandingan pasangan tersebut pada tab Input Hasil.
+PLAYER VS PLAYER
+Dropdown mengambil nama dari sheet Peserta. Rekap pasangan mengambil data dari sheet Input Hasil. Gunakan header jelas: Tanggal | Pemain A | Skor A | Pemain B | Skor B | Status. Variasi Player A/Score A/Player B/Score B juga didukung.
 
-Agar rekap otomatis terbaca, baris header Input Hasil sebaiknya memakai nama kolom yang jelas, misalnya:
-Tanggal | Pemain A | Skor A | Pemain B | Skor B | Status
+EDIT DENGAN NOTEPAD
+- config.js: URL API, nama tab, dan Informasi.
+- style.css: warna dan tampilan.
+- app.js: aturan pengambilan dan perhitungan data.
 
-Website akan menghitung jumlah pertandingan, kemenangan masing-masing, dan total skor. Nama kolom boleh menggunakan variasi Player A/Player B atau Nama A/Nama B.
-
-D. GITHUB PAGES
-Buat repository baru > upload file > Settings > Pages > Deploy from branch > main > /(root) > Save.
-
-CATATAN KEAMANAN
-Apps Script dijalankan sebagai pemilik spreadsheet dan dibuka untuk siapa saja. Karena website hanya membaca data, jangan tambahkan kode penulisan/edit data ke Code.gs tanpa perlindungan autentikasi.
+GITHUB PAGES
+Settings > Pages > Deploy from branch > main > /(root) > Save.
