@@ -9,6 +9,108 @@ function renderTable(sheet){sheet=normalize(sheet);const hs=sheet.headers||[],rs
 function allNames(){const s=normalize(state.sheets['Peserta']||{}),out=new Set();(s.dataRows||[]).forEach(r=>{const n=r.find((v,i)=>/nama|name/i.test(s.headers?.[i]||''))||r[2];if(n?.trim()&&!/nama|name/i.test(n))out.add(n.trim())});return [...out].sort((a,b)=>a.localeCompare(b))}
 function pvp(){const names=allNames();if(!names.length){$('pvpControls').innerHTML='<div class="error-state">Daftar pemain belum tersedia dari tab Peserta.</div>';return}if(!state.selectedA||!names.includes(state.selectedA))state.selectedA=names[0];if(!state.selectedB||!names.includes(state.selectedB)||state.selectedB===state.selectedA)state.selectedB=names.find(n=>n!==state.selectedA)||names[0];$('pvpControls').innerHTML=`<div class="select-block"><label>Pemain A<select id="playerA">${names.map(n=>`<option ${n===state.selectedA?'selected':''}>${esc(n)}</option>`).join('')}</select></label><span class="versus">VS</span><label>Pemain B<select id="playerB">${names.map(n=>`<option ${n===state.selectedB?'selected':''}>${esc(n)}</option>`).join('')}</select></label></div><div id="pvpSummary" class="pvp-summary"></div>`;$('playerA').onchange=e=>{state.selectedA=e.target.value;if(state.selectedA===state.selectedB)state.selectedB=names.find(n=>n!==state.selectedA)||names[0];pvp()};$('playerB').onchange=e=>{state.selectedB=e.target.value;pvp()};renderPvpSummary()}
 function renderPvpSummary(){const s=normalize(state.sheets['Input Hasil']||{}),rows=s.dataRows||[];const h=s.headers||[];const ai=h.findIndex(x=>/pemain.?a|player.?a|nama.?a/i.test(x)),bi=h.findIndex(x=>/pemain.?b|player.?b|nama.?b/i.test(x)),asi=h.findIndex(x=>/skor.?a|score.?a/i.test(x)),bsi=h.findIndex(x=>/skor.?b|score.?b/i.test(x));const matches=rows.filter(r=>ai>=0&&bi>=0&&((r[ai]===state.selectedA&&r[bi]===state.selectedB)||(r[ai]===state.selectedB&&r[bi]===state.selectedA)));let aWin=0,bWin=0,aPts=0,bPts=0;matches.forEach(r=>{const a=Number(r[asi]),b=Number(r[bsi]);const direct=r[ai]===state.selectedA;if(Number.isFinite(a)&&Number.isFinite(b)){const aw=direct?a>b:a<b;if(aw)aWin++;else if(a!==b)bWin++;if(direct){aPts+=a;bPts+=b}else{aPts+=b;bPts+=a}}});$('pvpSummary').innerHTML=`<div class="pvp-stat"><strong>${matches.length}</strong><span>Pertandingan selesai</span></div><div class="pvp-stat win"><strong>${aWin}</strong><span>Menang ${esc(state.selectedA)}</span></div><div class="pvp-stat loss"><strong>${bWin}</strong><span>Menang ${esc(state.selectedB)}</span></div><div class="pvp-stat"><strong>${aPts} — ${bPts}</strong><span>Total skor</span></div><p class="pvp-note">Dropdown membaca daftar pemain dari tab Peserta. Rekap skor menggunakan kolom pemain/skor pada tab Input Hasil.</p>`}
-async function loadData(showLoading=false){if(showLoading){$('loadingState').classList.remove('hidden');$('tableWrap').classList.add('hidden');$('syncText').textContent='Memuat data…'}$('errorState').classList.add('hidden');try{const [main,peserta,input]=await Promise.all([fetchSheet(state.activeTab),fetchSheet(SITE_CONFIG.tabs[0]),fetchSheet(SITE_CONFIG.tabs[1])]);state.sheets['Peserta']=peserta;state.sheets['Input Hasil']=input;state.sheets[state.activeTab.label]=main;if(state.activeTab.type==='pvp'){pvp();$('tableWrap').innerHTML='<div class="empty-state">Gunakan pilihan pemain di atas untuk melihat rekap.</div>';$('tableWrap').classList.remove('hidden')}else renderTable(main);$('syncText').textContent=SITE_CONFIG.sheetsApiUrl?'Tersinkronisasi + hidden/unhidden aktif':'Tersinkronisasi CSV';$('lastUpdated').textContent=`Diperbarui ${new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}`}catch(e){$('errorState').innerHTML=`<strong>Data belum dapat dimuat.</strong><br>${esc(e.message)}`;$('errorState').classList.remove('hidden');$('syncText').textContent='Gagal memuat'}finally{if(showLoading)$('loadingState').classList.add('hidden')}}
+async function loadData(showLoading = false) {
+  const currentTab = state.activeTab;
+
+  if (showLoading) {
+    $('loadingState').classList.remove('hidden');
+    $('syncText').textContent = 'Memuat data…';
+  }
+
+  $('errorState').classList.add('hidden');
+
+  try {
+    /*
+     * Tab biasa hanya mengambil sheet yang sedang dibuka.
+     * Tidak lagi mengambil Peserta dan Input Hasil setiap saat.
+     */
+    const main = await fetchSheet(currentTab);
+
+    state.sheets[currentTab.label] = main;
+    localStorage.setItem(
+      `liga-cache-${currentTab.label}`,
+      JSON.stringify(main)
+    );
+
+    if (currentTab.type === 'pvp') {
+      /*
+       * Player vs Player membutuhkan Peserta dan Input Hasil.
+       * Keduanya hanya diambil ketika tab ini benar-benar dibuka.
+       */
+      const [peserta, input] = await Promise.all([
+        fetchSheet(SITE_CONFIG.tabs[0]),
+        fetchSheet(SITE_CONFIG.tabs[1])
+      ]);
+
+      state.sheets['Peserta'] = peserta;
+      state.sheets['Input Hasil'] = input;
+
+      localStorage.setItem(
+        'liga-cache-Peserta',
+        JSON.stringify(peserta)
+      );
+
+      localStorage.setItem(
+        'liga-cache-Input Hasil',
+        JSON.stringify(input)
+      );
+
+      pvp();
+
+      $('tableWrap').innerHTML =
+        '<div class="empty-state">Gunakan pilihan pemain di atas untuk melihat rekap.</div>';
+
+      $('tableWrap').classList.remove('hidden');
+    } else {
+      renderTable(main);
+    }
+
+    $('syncText').textContent =
+      SITE_CONFIG.sheetsApiUrl &&
+      !SITE_CONFIG.sheetsApiUrl.includes('TEMPEL_URL')
+        ? 'Tersinkronisasi'
+        : 'Tersinkronisasi CSV';
+
+    $('lastUpdated').textContent =
+      `Diperbarui ${new Date().toLocaleTimeString('id-ID', {
+        hour: '2-digit',
+        minute: '2-digit'
+      })}`;
+
+  } catch (error) {
+    /*
+     * Jika API lambat atau gagal, tampilkan cache lama
+     * agar pengguna tidak melihat halaman kosong.
+     */
+    const cacheKey = `liga-cache-${currentTab.label}`;
+    const cached = localStorage.getItem(cacheKey);
+
+    if (cached) {
+      const oldData = JSON.parse(cached);
+      state.sheets[currentTab.label] = oldData;
+      renderTable(oldData);
+
+      $('syncText').textContent = 'Menampilkan data terakhir';
+    } else {
+      $('errorState').innerHTML =
+        `<strong>Data belum dapat dimuat.</strong>  
+${esc(error.message)}`;
+
+      $('errorState').classList.remove('hidden');
+      $('syncText').textContent = 'Gagal memuat';
+    }
+
+  } finally {
+    if (showLoading) {
+      $('loadingState').classList.add('hidden');
+    }
+  }
+}
 function selectTab(i){state.activeTab=SITE_CONFIG.tabs[i];document.querySelectorAll('.tab').forEach((b,j)=>b.classList.toggle('active',i===j));$('sectionTitle').textContent=state.activeTab.label;$('sectionDescription').textContent=state.activeTab.description;$('pvpControls').classList.toggle('hidden',state.activeTab.type!=='pvp');if(state.activeTab.type==='info'){$('tablePanel').classList.add('hidden');$('infoPanel').classList.remove('hidden');$('infoPanel').innerHTML=SITE_CONFIG.informationHtml;$('syncText').textContent='Konten lokal siap';return}$('infoPanel').classList.add('hidden');$('tablePanel').classList.remove('hidden');loadData(true)}
-$('refreshButton').onclick=()=>loadData(true);renderTabs();selectTab(0);setInterval(()=>loadData(false),SITE_CONFIG.refreshIntervalMs);
+$('refreshButton').onclick = () => loadData(true);
+
+renderTabs();
+selectTab(0);
+
+// Refresh otomatis setiap 5 menit tanpa loading besar
+setInterval(() => loadData(false), SITE_CONFIG.refreshIntervalMs);
