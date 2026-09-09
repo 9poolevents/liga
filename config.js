@@ -10,7 +10,7 @@ const SITE_CONFIG = {
     { label: 'Klasemen', sheetName: 'Klasemen', gid: '3', description: 'Klasemen sementara Liga 9 Pool Family.' },
     { label: 'Keaktifan', sheetName: 'Keaktifan', gid: '4', description: 'Ringkasan keaktifan peserta.' },
     { label: 'Power Rating', sheetName: 'Power Rating', gid: '5', description: 'Perbandingan power rating peserta.' },
-    { label: 'Player vs Player', sheetName: 'Player vs Player', gid: '6', type: 'pvp', description: 'Pilih dua pemain untuk melihat statistik, skor, dan jadwal mereka.' },
+    { label: 'Player to Player', sheetName: 'Player Card', gid: '7', type: 'pvp', description: 'Kartu pemain, statistik, riwayat pertandingan, dan lawan yang belum terlaksana.' },
     { label: 'Informasi', type: 'info', description: 'Informasi tambahan liga.' }
   ],
   informationHtml: `<article class="info-card"><p class="eyebrow accent">INFORMASI LIGA</p><h3>Selamat datang di Liga 9 Pool Family Musim II</h3><p>Edit bagian <strong>informationHtml</strong> di file <strong>config.js</strong> memakai Notepad untuk menambahkan peraturan, foto, pengumuman, atau tabel.</p></article><article class="info-card"><h3>Sinkronisasi</h3><p>Data mengikuti sheet berdasarkan <strong>nama tab</strong>. Hide/unhide baris dan kolom dibaca Apps Script setiap kali refresh.</p></article>`
