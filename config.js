@@ -3,7 +3,7 @@ const SITE_CONFIG = {
   // Isi dengan URL deployment Web App Apps Script agar hide/unhide ikut persis.
   sheetsApiUrl: 'https://script.google.com/macros/s/AKfycbwLJ9siSbnrwCYeEwfNq1lx0JhN3XsqNxleJDithm3CEONMA4_yqLW9Z7qJ_UWDCSNa/exec',
   // Refresh otomatis setiap 5 menit. Refresh berkala berjalan tanpa overlay loading.
-  refreshIntervalMs: 300000,
+  refreshIntervalMs: 86400000,
   tabs: [
     { label: 'Peserta', sheetName: 'Peserta', gid: '1', description: 'Daftar peserta, tier, status, dan statistik dasar.' },
     { label: 'Input Hasil', sheetName: 'Input Hasil', gid: '2', description: 'Input dan riwayat hasil pertandingan.' },
